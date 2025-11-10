@@ -1,0 +1,184 @@
+<svg fill="none" viewBox="0 0 800 240" width="800" height="240" xmlns="http://www.w3.org/2000/svg">
+    <foreignObject width="100%" height="100%">
+        <div xmlns="http://www.w3.org/1999/xhtml">
+            <style>
+                * { margin: 0; padding: 0; box-sizing: border-box; }
+                .container {
+                    width: 800px;
+                    height: 240px;
+                    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+                    border-radius: 10px;
+                    padding: 20px 30px;
+                    font-family: ui-monospace, 'SF Mono', Monaco, 'Cascadia Code', 'Courier New', monospace;
+                }
+                .terminal-header {
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                    padding: 8px;
+                    background-color: rgba(0, 0, 0, 0.3);
+                    border-radius: 8px;
+                    margin-bottom: 20px;
+                }
+                .circle {
+                    width: 12px;
+                    height: 12px;
+                    border-radius: 50%;
+                }
+                .red { background: #FF5F56; }
+                .yellow { background: #FFBD2E; }
+                .green { background: #27C93F; }
+
+                .command-line {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    margin-bottom: 16px;
+                    font-size: 20px;
+                    opacity: 0;
+                    animation: fadeIn 0.3s ease-out forwards;
+                }
+                .arrow {
+                    color: #FF6B35;
+                    font-weight: bold;
+                }
+                .spinner {
+                    color: #FF6B35;
+                    font-size: 18px;
+                }
+                .spinner::before {
+                    content: '⣾';
+                    animation: rotate 1.2s linear infinite, complete 0s 5.0s forwards;
+                }
+                @keyframes rotate {
+                    0% { content: '⣾'; }
+                    12.5% { content: '⣽'; }
+                    25% { content: '⣻'; }
+                    37.5% { content: '⢿'; }
+                    50% { content: '⡿'; }
+                    62.5% { content: '⣟'; }
+                    75% { content: '⣯'; }
+                    87.5% { content: '⣷'; }
+                    100% { content: '⣷'; }
+                }
+                @keyframes complete {
+                    to { content: '✓'; color: #27C93F; }
+                }
+                .command {
+                    color: #FFD9CC;
+                    overflow: hidden;
+                    border-right: 2px solid #FFD9CC;
+                    white-space: nowrap;
+                    width: 0;
+                    animation:
+                        typing 1s steps(6) 0.3s forwards,
+                        blink 0.75s step-end 0s 2,
+                        hideCursor 0s 1.5s forwards;
+                }
+                @keyframes typing {
+                    from { width: 0; }
+                    to { width: 5.5em; }
+                }
+                @keyframes blink {
+                    50% { border-color: transparent; }
+                }
+                @keyframes hideCursor {
+                    to { border-color: transparent; }
+                }
+
+                .output {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 8px;
+                    font-size: 16px;
+                }
+                .line {
+                    display: flex;
+                    gap: 10px;
+                    align-items: flex-start;
+                    opacity: 0;
+                }
+                .line:nth-child(1) {
+                    animation: fadeInUp 0.5s ease-out 1.3s forwards;
+                }
+                .line:nth-child(2) {
+                    animation: fadeInUp 0.5s ease-out 1.8s forwards;
+                }
+                .line:nth-child(3) {
+                    animation: fadeInUp 0.5s ease-out 4.5s forwards;
+                }
+                .bullet {
+                    color: #FF6B35;
+                    flex-shrink: 0;
+                }
+                .text {
+                    color: #B8B8B8;
+                    line-height: 1.6;
+                }
+                .highlight {
+                    color: #FFD9CC;
+                    font-weight: 500;
+                }
+                .typing-line {
+                    overflow: hidden;
+                    white-space: nowrap;
+                    width: 0;
+                    animation: typeLine 2.5s steps(50) 2.0s forwards;
+                }
+                @keyframes typeLine {
+                    to { width: 100%; }
+                }
+                a {
+                    color: #FFD9CC;
+                    text-decoration: none;
+                }
+                a:hover {
+                    text-decoration: underline;
+                }
+                @keyframes fadeIn {
+                    to { opacity: 1; }
+                }
+                @keyframes fadeInUp {
+                    from {
+                        opacity: 0;
+                        transform: translateY(10px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+            </style>
+            <div class="container">
+                <div class="terminal-header">
+                    <div class="circle red"></div>
+                    <div class="circle yellow"></div>
+                    <div class="circle green"></div>
+                </div>
+                <div class="command-line">
+                    <span class="arrow">&gt;</span>
+                    <span class="spinner"></span>
+                    <span class="command">whoami</span>
+                </div>
+                <div class="output">
+                    <div class="line">
+                        <span class="bullet">⏺</span>
+                        <span class="text">
+                            <span class="highlight">Artem Zhutov</span> – Physics PhD × Automation Systems
+                        </span>
+                    </div>
+                    <div class="line">
+                        <span class="bullet">⏺</span>
+                        <span class="text typing-line">Building • Demoing • Shipping AI agent workflows</span>
+                    </div>
+                    <div class="line">
+                        <span class="bullet">⏺</span>
+                        <span class="text">
+                            Watch: <a href="https://youtube.com/@ArtemXTech" target="_blank" class="highlight">youtube.com/@ArtemXTech</a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </foreignObject>
+</svg>

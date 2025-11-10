@@ -1,0 +1,212 @@
+<svg fill="none" viewBox="0 0 800 240" width="800" height="240" xmlns="http://www.w3.org/2000/svg">
+    <foreignObject width="100%" height="100%">
+        <div xmlns="http://www.w3.org/1999/xhtml">
+            <style>
+                .container {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    justify-content: flex-start;
+                    margin: 0;
+                    width: 100%;
+                    height: 240px;
+                    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+                    border-radius: 10px;
+                    color: #FF6B35;
+                    font-family: ui-monospace, 'SF Mono', Monaco, 'Cascadia Mono', 'Segoe UI Mono', 'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace', 'Source Code Pro', 'Fira Mono', 'Droid Sans Mono', 'Courier New', monospace;
+                    padding: 20px 30px;
+                    box-sizing: border-box;
+                }
+                .terminal-header {
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-start;
+                    padding: 8px;
+                    width: 100%;
+                    background-color: rgba(0, 0, 0, 0.3);
+                    border-radius: 8px;
+                    margin-bottom: 20px;
+                }
+                .terminal-circle {
+                    width: 12px;
+                    height: 12px;
+                    border-radius: 50%;
+                    margin-right: 6px;
+                }
+                .terminal-circle-red { background-color: #FF5F56; }
+                .terminal-circle-yellow { background-color: #FFBD2E; }
+                .terminal-circle-green { background-color: #27C93F; }
+                .terminal_command_wrap {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    margin-bottom: 16px;
+                }
+                .terminal_command_arrow {
+                    color: #FF6B35;
+                    font-size: 20px;
+                    font-weight: bold;
+                }
+                .spinner {
+                    color: #FF6B35;
+                    font-size: 18px;
+                }
+                .terminal_command_text {
+                    color: #FFD9CC;
+                    font-size: 20px;
+                }
+                .cursor {
+                    display: inline-block;
+                    width: 8px;
+                    height: 20px;
+                    background-color: #FFD9CC;
+                    margin-left: 2px;
+                    animation: blink 1s step-end infinite;
+                }
+                @keyframes blink {
+                    50% { opacity: 0; }
+                }
+                .terminal_command_output {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 8px;
+                    margin-left: 0;
+                }
+                .output-line {
+                    display: flex;
+                    align-items: flex-start;
+                    gap: 10px;
+                }
+                .bullet {
+                    color: #FF6B35;
+                    font-size: 16px;
+                    flex-shrink: 0;
+                }
+                .output-text {
+                    color: #B8B8B8;
+                    font-size: 16px;
+                    line-height: 1.6;
+                }
+                .highlight {
+                    color: #FFD9CC;
+                    font-weight: 500;
+                }
+                .link {
+                    color: #FFD9CC;
+                    text-decoration: none;
+                }
+                .link:hover {
+                    text-decoration: underline;
+                }
+            </style>
+            <div class="container">
+                <div class="terminal-header">
+                    <div class="terminal-circle terminal-circle-red"></div>
+                    <div class="terminal-circle terminal-circle-yellow"></div>
+                    <div class="terminal-circle terminal-circle-green"></div>
+                </div>
+                <div class="terminal_command_wrap">
+                    <div class="terminal_command_arrow">&gt;</div>
+                    <div class="spinner" id="spinner">⣾</div>
+                    <div class="terminal_command_text" id="command"></div>
+                    <div class="cursor" id="commandCursor"></div>
+                </div>
+                <div class="terminal_command_output" id="output">
+                    <div class="output-line" id="outputLine1" style="display: none;">
+                        <div class="bullet">⏺</div>
+                        <div class="output-text" id="line1"></div>
+                    </div>
+                    <div class="output-line" id="outputLine2" style="display: none;">
+                        <div class="bullet">⏺</div>
+                        <div class="output-text" id="line2"></div>
+                        <div class="cursor" id="cursor2" style="display: none;"></div>
+                    </div>
+                    <div class="output-line" id="outputLine3" style="display: none;">
+                        <div class="bullet">⏺</div>
+                        <div class="output-text" id="line3"></div>
+                    </div>
+                </div>
+            </div>
+            <script><![CDATA[
+                (function() {
+                    const spinnerSymbols = ['⣾', '⣽', '⣻', '⢿', '⡿', '⣟', '⣯', '⣷'];
+                    let spinnerIndex = 0;
+                    const spinner = document.getElementById('spinner');
+
+                    const spinnerInterval = setInterval(function() {
+                        spinner.textContent = spinnerSymbols[spinnerIndex];
+                        spinnerIndex = (spinnerIndex + 1) % spinnerSymbols.length;
+                    }, 350);
+
+                    // Type with natural pauses between words
+                    function typeWithPauses(element, words, cursor, callback) {
+                        if (cursor) cursor.style.display = 'inline-block';
+                        let wordIndex = 0;
+
+                        function typeWord() {
+                            if (wordIndex < words.length) {
+                                const word = words[wordIndex];
+                                let charIndex = 0;
+
+                                function typeChar() {
+                                    if (charIndex < word.length) {
+                                        element.innerHTML += word.charAt(charIndex);
+                                        charIndex++;
+                                        setTimeout(typeChar, 50 + Math.random() * 50);
+                                    } else {
+                                        wordIndex++;
+                                        // Longer pause between words (like thinking)
+                                        setTimeout(typeWord, 200 + Math.random() * 200);
+                                    }
+                                }
+                                typeChar();
+                            } else {
+                                if (cursor) cursor.style.display = 'none';
+                                if (callback) callback();
+                            }
+                        }
+                        typeWord();
+                    }
+
+                    // Command typing
+                    typeWithPauses(
+                        document.getElementById('command'),
+                        ['whoami'],
+                        document.getElementById('commandCursor'),
+                        function() {
+                            setTimeout(function() {
+                                document.getElementById('commandCursor').style.display = 'none';
+
+                                setTimeout(function() {
+                                    document.getElementById('outputLine1').style.display = 'flex';
+                                    document.getElementById('line1').innerHTML = '<span class="highlight">Artem Zhutov</span> – Physics PhD × Automation Systems';
+
+                                    setTimeout(function() {
+                                        document.getElementById('outputLine2').style.display = 'flex';
+                                        // Type word by word with pauses
+                                        typeWithPauses(
+                                            document.getElementById('line2'),
+                                            ['Building ', '• ', 'Demoing ', '• ', 'Shipping ', 'AI ', 'agent ', 'workflows'],
+                                            document.getElementById('cursor2'),
+                                            function() {
+                                                setTimeout(function() {
+                                                    document.getElementById('outputLine3').style.display = 'flex';
+                                                    document.getElementById('line3').innerHTML = 'Watch: <a href="https://youtube.com/@ArtemXTech" target="_blank" class="link highlight">youtube.com/@ArtemXTech</a>';
+
+                                                    setTimeout(function() {
+                                                        clearInterval(spinnerInterval);
+                                                        spinner.textContent = '✓';
+                                                    }, 400);
+                                                }, 300);
+                                            }
+                                        );
+                                    }, 400);
+                                }, 150);
+                            }, 400);
+                        }
+                    );
+                })();
+            ]]></script>
+        </div>
+    </foreignObject>
+</svg>
